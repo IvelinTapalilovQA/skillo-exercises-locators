@@ -24,8 +24,8 @@ public class testLogoSkillo {
         WebDriverManager.chromedriver().setup();
         this.driver = new ChromeDriver();
         this.driver.manage().window().maximize();
-        this.driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
-        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        this.driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class testLogoSkillo {
         WebElement logoHomePageRedirect = driver.findElement(By.id("homeIcon"));
         logoHomePageRedirect.isDisplayed();
     }
-    @AfterTest
+    @AfterMethod
     public void browserClosing() {
         this.driver.close();
     }
