@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
-
 import java.time.Duration;
 
 
@@ -17,15 +16,17 @@ import java.time.Duration;
 public class testLogoSkillo {
 
     private WebDriver driver;
-
+    @BeforeSuite
+    public void setUpSuite(){
+        WebDriverManager.chromedriver().setup();
+    }
 
     @BeforeMethod
     public void setUpTest() {
-        WebDriverManager.chromedriver().setup();
         this.driver = new ChromeDriver();
         this.driver.manage().window().maximize();
         this.driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
-        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     @Test
