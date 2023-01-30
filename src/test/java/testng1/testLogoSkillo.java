@@ -9,15 +9,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import java.time.Duration;
 
+import java.time.Duration;
 
 
 public class testLogoSkillo {
 
     private WebDriver driver;
+
     @BeforeSuite
-    public void setUpSuite(){
+    public void setUpSuite() {
         WebDriverManager.chromedriver().setup();
     }
 
@@ -52,8 +53,8 @@ public class testLogoSkillo {
     }
 
     @DataProvider(name = "userNames")
-    public Object[][] userName(){
-        return new Object[][] {
+    public Object[][] userName() {
+        return new Object[][]{
                 {"ivelinQA", "Ivelin123", "ivelinQA"},
                 {"testAdmin@gmail.com", "Admin1.User1", "AdminUser"}};
     }
@@ -116,8 +117,11 @@ public class testLogoSkillo {
         Assert.assertTrue(logoAfterLogout.isDisplayed());
 
     }
+
     @AfterMethod
     public void browserClosing() {
-        this.driver.close();
+        if (this.driver != null) {
+            this.driver.close();
+        }
     }
 }
