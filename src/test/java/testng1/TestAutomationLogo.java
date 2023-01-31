@@ -12,7 +12,7 @@ import org.testng.annotations.*;
 
 import java.time.Duration;
 
-public class testLogoSkillo {
+public class TestAutomationLogo {
 
     private WebDriver driver;
 
@@ -90,35 +90,73 @@ public class testLogoSkillo {
         Boolean isTextDisplayed = wait.until(ExpectedConditions.textToBe(By.tagName("h2"), name));
         Assert.assertTrue(isTextDisplayed);
 
-        WebElement logoHomePage = driver.findElement(By.id("homeIcon"));
-        Assert.assertTrue(logoHomePage.isDisplayed());
+        WebElement logoProfile = driver.findElement(By.id("homeIcon"));
+        Assert.assertTrue(logoProfile.isDisplayed());
 
         WebElement newPostLink = driver.findElement(By.id("nav-link-new-post"));
         newPostLink.click();
 
         WebElement logoNewPost = driver.findElement(By.id("homeIcon"));
         Assert.assertTrue(logoNewPost.isDisplayed());
-        wait.until(ExpectedConditions.elementToBeClickable(logoNewPost));
         logoNewPost.click();
 
         wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/posts/all"));
 
         WebElement logoHomePageRedirect = driver.findElement(By.id("homeIcon"));
         Assert.assertTrue(logoHomePageRedirect.isDisplayed());
-
-        WebElement logoutButton = driver.findElement(By.cssSelector("#navbarColor01 > ul.navbar-nav.my-ml.d-none.d-md-block > li > a > i"));
-        wait.until(ExpectedConditions.elementToBeClickable(logoutButton));
-        logoutButton.click();
-
-        wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/users/login"));
-
-        WebElement logoAfterLogout = driver.findElement(By.id("homeIcon"));
-        Assert.assertTrue(logoAfterLogout.isDisplayed());
     }
-    @AfterMethod
-    public void browserClosing() {
-        if (this.driver != null) {
-            this.driver.close();
+        @Test(dataProvider = "userNames")
+        public void afterLogoutTest(String userName, String password, String name) {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+            this.driver.get("http://training.skillo-bg.com:4300/posts/all");
+
+            WebElement loginLink = driver.findElement(By.id("nav-link-login"));
+            loginLink.click();
+
+            wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/users/login"));
+
+            WebElement signInElement = driver.findElement(By.xpath("//p[text()='Sign in']"));
+            wait.until(ExpectedConditions.visibilityOf(signInElement));
+
+            WebElement userNameField = driver.findElement(By.id("defaultLoginFormUsername"));
+            userNameField.sendKeys(userName);
+
+            WebElement passwordField = driver.findElement(By.id("defaultLoginFormPassword"));
+            passwordField.sendKeys(password);
+
+            WebElement signInButton = driver.findElement(By.id("sign-in-button"));
+            wait.until(ExpectedConditions.elementToBeClickable(signInElement));
+            signInButton.click();
+
+            wait.until(ExpectedConditions.urlContains("http://training.skillo-bg.com:4300/users/"));
+
+            WebElement profileLink = driver.findElement(By.id("nav-link-profile"));
+            wait.until(ExpectedConditions.elementToBeClickable(signInElement));
+            profileLink.click();
+
+            Boolean isTextDisplayed = wait.until(ExpectedConditions.textToBe(By.tagName("h2"), name));
+            Assert.assertTrue(isTextDisplayed);
+
+            WebElement logoutButton = driver.findElement(By.cssSelector("#navbarColor01 > ul.navbar-nav.my-ml.d-none.d-md-block > li > a > i"));
+            wait.until(ExpectedConditions.elementToBeClickable(logoutButton));
+            logoutButton.click();
+
+            wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/users/login"));
+
+            WebElement logoAfterLogout = driver.findElement(By.id("homeIcon"));
+            Assert.assertTrue(logoAfterLogout.isDisplayed());
+            logoAfterLogout.click();
+
+            wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/posts/all"));
+
+            WebElement logoHomePageRedirect = driver.findElement(By.id("homeIcon"));
+            Assert.assertTrue(logoHomePageRedirect.isDisplayed());
+        }
+        @AfterMethod
+        public void browserClosing () {
+            if (this.driver != null) {
+                this.driver.close();
+            }
         }
     }
-}
