@@ -31,7 +31,6 @@ public class TestAutomationLogo {
 
     @Test
     public void testLogo() {
-
         this.driver.get("http://training.skillo-bg.com:4300/posts/all");
 
         WebElement logoHomePage = driver.findElement(By.id("homeIcon"));
