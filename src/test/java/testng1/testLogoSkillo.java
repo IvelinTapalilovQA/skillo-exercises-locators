@@ -12,7 +12,6 @@ import org.testng.annotations.*;
 
 import java.time.Duration;
 
-
 public class testLogoSkillo {
 
     private WebDriver driver;
@@ -115,9 +114,7 @@ public class testLogoSkillo {
 
         WebElement logoAfterLogout = driver.findElement(By.id("homeIcon"));
         Assert.assertTrue(logoAfterLogout.isDisplayed());
-
     }
-
     @AfterMethod
     public void browserClosing() {
         if (this.driver != null) {
