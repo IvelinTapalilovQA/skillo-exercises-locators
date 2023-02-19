@@ -14,6 +14,8 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestAutomationExerciseTwo {
     private WebDriver driver;
@@ -139,10 +141,60 @@ public class TestAutomationExerciseTwo {
             System.out.println("The NO radio button is disabled!");
         }
     }
+    @Test
+    public void testTabs(){
+        driver.get("https://demoqa.com/browser-windows");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        WebElement newTabButton = driver.findElement(By.id("tabButton"));
+        newTabButton.click();
+
+        List<String> windowTabs = new ArrayList<>(driver.getWindowHandles());
+        String tabTwo = windowTabs.get(1);
+        driver.switchTo().window(tabTwo);
+
+        wait.until(ExpectedConditions.urlToBe("https://demoqa.com/sample"));
+
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertEquals(currentUrl, "https://demoqa.com/sample");
+
+        WebElement newTabHeader = driver.findElement(By.id("sampleHeading"));
+        Assert.assertEquals(newTabHeader.getText(), "This is a sample page");
+
+        String mainTab = windowTabs.get(0);
+        driver.switchTo().window(mainTab);
+
+        String mainWindowUrl = driver.getCurrentUrl();
+        Assert.assertEquals(mainWindowUrl, "https://demoqa.com/browser-windows");
+    }
+    @Test
+    public void testWindows(){
+        driver.get("https://demoqa.com/browser-windows");
+
+        WebElement newWindowButton = driver.findElement(By.id("windowButton"));
+        newWindowButton.click();
+
+        List<String> windows = new ArrayList<>(driver.getWindowHandles());
+        String secondWindow = windows.get(1);
+        driver.switchTo().window(secondWindow);
+
+        driver.manage().window().maximize();
+
+        WebElement newWindowHeader = driver.findElement(By.id("sampleHeading"));
+        Assert.assertEquals(newWindowHeader.getText(), "This is a sample page");
+
+        String backToMainWindowIndex = windows.get(0);
+        driver.switchTo().window(backToMainWindowIndex);
+
+        String actualUrl = driver.getCurrentUrl();
+        Assert.assertEquals(actualUrl, "https://demoqa.com/browser-windows");
+    }
+
     @AfterMethod
     public void browserClosing() {
         if (this.driver != null) {
-            this.driver.close();
+            this.driver.quit();
         }
     }
     public boolean isElementPresent(By locatorKey) {
